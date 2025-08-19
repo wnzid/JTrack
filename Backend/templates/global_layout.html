@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block head %}
+  <title>{% block title %}JTrack{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='Css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='Css/report.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  {% block extra_head %}{% endblock %}
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block body %}
+{% include 'header.html' %}
+<div class="app-container">
+  <nav class="sidebar d-flex flex-column shadow-sm">
+    <ul class="nav nav-pills flex-column nav-links gap-2">
+      <li class="nav-item {{ 'active' if request.endpoint in ['dashboard', 'leader_dashboard', 'managerial_dashboard'] else '' }}">
+        <a class="nav-link" href="{{ url_for('leader_dashboard') if session.get('role') == 'Leader' else url_for('dashboard') }}" title="Dashboard">
+          <i class="fa-solid fa-chart-line"></i>
+        </a>
+      </li>
+      <li class="nav-item {{ 'active' if request.endpoint == 'custom_dashboard' else '' }}">
+        <a class="nav-link" href="{{ url_for('custom_dashboard') }}" title="Create Dashboard">
+          <i class="fa-solid fa-pen-to-square"></i>
+        </a>
+      </li>
+      <li class="nav-item {{ 'active' if request.endpoint == 'download_data' else '' }}">
+        <a class="nav-link" href="#" title="Download Data"><i class="fa-solid fa-download"></i></a>
+      </li>
+      <li class="nav-item {{ 'active' if request.endpoint == 'settings' else '' }}">
+        <a class="nav-link" href="#" title="Settings"><i class="fa-solid fa-gear"></i></a>
+      </li>
+      <li class="nav-item mt-auto">
+        <a class="nav-link text-danger" href="{{ url_for('logout') }}" title="Sign Out"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+      </li>
+    </ul>
+  </nav>
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+</div>
+{% block extra_scripts %}{% endblock %}
+{% endblock %}

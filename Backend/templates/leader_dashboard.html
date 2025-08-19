@@ -1,0 +1,58 @@
+{% extends "global_layout.html" %}
+
+{% block title %}Leader Dashboard – KPI Overview{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='Css/leader-dashboard.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<section class="dashboard-header">
+  <h1>Leader Dashboard</h1>
+</section>
+
+<section class="dashboard-body">
+  <div class="charts-container">
+    <div class="chart-card">
+      <h3>Application Status</h3>
+      <button class="view-report" onclick="location.href='{{ url_for('application_status_report') }}'">View Report</button>
+      <canvas id="applicationStatusChart" width="400" height="200"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Deferred Offers Overview</h3>
+      <button class="view-report" onclick="location.href='{{ url_for('deferred_offers_report') }}'">View Report</button>
+      <canvas id="deferredOffersChart" width="400" height="200"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Agent Performance</h3>
+      <button class="view-report" onclick="location.href='{{ url_for('agent_performance_report') }}'">View Report</button>
+      <canvas id="agentPerformanceChart" width="400" height="200"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Student Classification</h3>
+      <button class="view-report" onclick="location.href='{{ url_for('student_classification_report') }}'">View Report</button>
+      <canvas id="studentClassificationChart" width="400" height="200"></canvas>
+    </div>
+  </div>
+
+  <aside class="kpi-storyboards">
+    <h2 class="kpi-storyboards__title">Storyboards</h2>
+    <div class="kpi-card blue">
+      <h4>Top Performing Agents</h4>
+    </div>
+    <div class="kpi-card orange">
+      <h4>Enrollment Trend by Intake</h4>
+    </div>
+    <div class="kpi-card green">
+      <h4>Estimated Revenue for Enrollment</h4>
+    </div>
+  </aside>
+
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script src="{{ url_for('static', filename='js/leader-dashboard.js') }}"></script>
+{% endblock %}
+

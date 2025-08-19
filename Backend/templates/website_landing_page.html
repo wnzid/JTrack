@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block head %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JTrack Portal</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='Css/landing.css') }}">
+  <script src="{{ url_for('static', filename='js/landing.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="glass-bg">
+  <section class="hero">
+    <section class="glass glass-card">
+      <div>
+        <h2>JTrack</h2>
+        <h2>Power BI Dashboard Portal</h2>
+        <p>A centralized, real-time intelligence system for decision-making, insight, and strategy</p>
+        <a href="{{ url_for('leader_dashboard') if session.get('role') == 'Leader' else url_for('dashboard') if session.get('role') == 'Manager' else url_for('login') }}" class="btn-glass">Get Started</a>
+      </div>
+    </section>
+  </section>
+
+  <section class="about-section">
+    <div class="container">
+      <a href="{{ url_for('about') }}" class="text-decoration-none text-reset">
+        <div class="glass glass-card about-card text-center mx-auto p-4">
+          <h5 class="mb-2">About Us</h5>
+          <p class="mb-0">
+            JTrack is a centralized business intelligence platform that empowers organizations with real-time data, insightful reports, and interactive dashboards. Our mission is to simplify data-driven decision-making and help teams achieve growth through powerful analytics.
+          </p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="section-features">
+    <div class="container">
+      <div class="row gy-4">
+        <div class="col-lg-4">
+          <div class="glass glass-card text-center p-4">
+            <img src="{{ url_for('static', filename='Assets/kpi.png') }}" class="card-img-top mb-3" alt="Real-Time KPIs"/>
+            <h5 class="card-title">Real-Time KPIs</h5>
+            <p class="card-text">Monitor academic, agent, and financial metrics</p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="glass glass-card text-center p-4">
+            <img src="{{ url_for('static', filename='Assets/intrigation.png') }}" class="card-img-top mb-3" alt="Multi-Source Integration"/>
+            <h5 class="card-title">Multi-Source Integration</h5>
+            <p class="card-text">SharePoint, Excel &amp; more</p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="glass glass-card text-center p-4">
+            <img src="{{ url_for('static', filename='Assets/filters.png') }}" class="card-img-top mb-3" alt="Advanced Filters"/>
+            <h5 class="card-title">Advanced Filters</h5>
+            <p class="card-text">Drill-down by region, department, timeline, status</p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="glass glass-card text-center p-4">
+            <img src="{{ url_for('static', filename='Assets/storytelling.png') }}" class="card-img-top mb-3" alt="Data Storytelling"/>
+            <h5 class="card-title">Data Storytelling</h5>
+            <p class="card-text">Summarized insights and trend analysis</p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="glass glass-card text-center p-4">
+            <img src="{{ url_for('static', filename='Assets/drag-drop.jpg') }}" class="card-img-top mb-3" alt="Drag and Drop"/>
+            <h5 class="card-title">Drag and Drop</h5>
+            <p class="card-text">Generate visualizations easily</p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="glass glass-card text-center p-4">
+            <img src="{{ url_for('static', filename='Assets/role-base.png') }}" class="card-img-top mb-3" alt="User-based Data Integration"/>
+            <h5 class="card-title">User-based Data Integration</h5>
+            <p class="card-text">Secure access by user roles</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{# Login page template #}
+{% block head %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign In — JTrack</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='Css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='Css/glass.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='Css/login.css') }}">
+{% endblock %}
+
+{% block body %}
+  <main class="d-flex align-items-center justify-content-center min-vh-100">
+    <div class="card p-4 shadow-sm glass" style="max-width: 400px; width:100%;">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, msg in messages %}
+            <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+              {{ msg }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      <h2 class="text-center mb-4">Sign In</h2>
+      <form action="{{ url_for('login') }}" method="post">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="abc@jtrack.edu.au" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <div class="input-group">
+            <input type="password" class="form-control" id="password" name="password" placeholder="12 characters or longer" required>
+            <button type="button" class="btn btn-outline-secondary toggle-password">Show</button>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Sign In</button>
+        <div class="text-end mt-2">
+          <a href="#" class="small">Forgot password?</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{# User registration page template #}
+{% block head %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registration Page</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='Css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='Css/glass.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='Css/registration.css') }}" />
+{% endblock %}
+
+{% block body %}
+<main class="d-flex align-items-center justify-content-center min-vh-100">
+  <div class="card p-4 shadow-sm glass" style="max-width: 450px; width:100%;">
+    <div class="mb-3 text-center">
+      <h3>Register now to start Exploring!</h3>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, msg in messages %}
+          <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+            {{ msg }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <form id="registrationForm" action="{{ url_for('register') }}" method="post">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="Email" placeholder="abc@jtrack.edu.au" required />
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <div class="input-group">
+          <input type="password" class="form-control" id="password" name="Password" placeholder="12 characters or longer" required />
+          <button type="button" class="btn btn-outline-secondary toggle-password">Show</button>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label d-block">Register as</label>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="Role" id="leader" value="Leader" required />
+          <label class="form-check-label" for="leader">Leader</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="Role" id="manager" value="Manager" required />
+          <label class="form-check-label" for="manager">Manager</label>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Register</button>
+    </form>
+  </div>
+</main>
+
+<script src="{{ url_for('static', filename='js/registration.js') }}"></script>
+{% endblock %}
