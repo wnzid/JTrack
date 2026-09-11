@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}JTrack — Student operations at a glance{% endblock %}
+{% block body_class %}marketing-page{% endblock %}
+{% block body %}
+<main id="main-content">
+  <section class="hero shell">
+    <div class="hero__copy">
+      <p class="eyebrow">Student operations intelligence</p>
+      <h1>See the whole student journey. Act on what changes.</h1>
+      <p class="lede">JTrack turns application, offer, enrollment, agent, and visa data into a shared operational view for education teams.</p>
+      <div class="button-row">
+        <a class="button" href="{{ url_for('pages.dashboard') if session.get('role') == 'Manager' else url_for('pages.leader_dashboard') if session.get('role') == 'Leader' else url_for('auth.login') }}">
+          {{ 'Open workspace' if session.get('email') else 'Sign in to JTrack' }}
+        </a>
+        <a class="text-link" href="#capabilities">Explore the workflow <span aria-hidden="true">↓</span></a>
+      </div>
+    </div>
+    <div class="hero__instrument" aria-label="JTrack data flow overview">
+      <p class="instrument__label">Operational signal map</p>
+      <ol class="signal-map">
+        <li><span>01</span><strong>Applications</strong><small>volume · status · intake</small></li>
+        <li><span>02</span><strong>Offers</strong><small>conversion · deferral · expiry</small></li>
+        <li><span>03</span><strong>Students</strong><small>enrollment · course · visa</small></li>
+      </ol>
+      <p class="instrument__note">Excel / SQLite / SharePoint → one consistent reporting layer</p>
+    </div>
+  </section>
+
+  <section class="proof-strip" aria-label="Product principles">
+    <div class="shell proof-strip__inner">
+      <p><span>01</span> Role-aware views</p>
+      <p><span>02</span> Traceable source data</p>
+      <p><span>03</span> Exportable reports</p>
+      <p><span>04</span> Custom analysis</p>
+    </div>
+  </section>
+
+  <section class="section shell" id="capabilities">
+    <div class="section-heading">
+      <p class="eyebrow">One working surface</p>
+      <h2>From intake signal to team decision.</h2>
+      <p>Designed for repeated operational questions, not presentation theatre.</p>
+    </div>
+    <div class="capability-list">
+      <article>
+        <p class="mono">01 / Monitor</p>
+        <h3>Read pipeline health quickly</h3>
+        <p>Review application state, offer conversion, and enrollment movement without rebuilding the same spreadsheet.</p>
+      </article>
+      <article>
+        <p class="mono">02 / Investigate</p>
+        <h3>Move from chart to rows</h3>
+        <p>Sort, search, switch chart modes, and inspect the table behind every report from the same page.</p>
+      </article>
+      <article>
+        <p class="mono">03 / Compose</p>
+        <h3>Build the view you need</h3>
+        <p>Choose dimensions and measures from source data, then keep a personal dashboard in the browser.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="closing-band">
+    <div class="shell closing-band__inner">
+      <div><p class="eyebrow">Less reporting overhead</p><h2>Give the next decision a clearer starting point.</h2></div>
+      <a class="button button--light" href="{{ url_for('auth.register') }}">Create an account</a>
+    </div>
+  </section>
+</main>
+{% endblock %}

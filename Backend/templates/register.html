@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Create account — JTrack{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+{% block body %}
+<main id="main-content" class="auth-layout">
+  <section class="auth-context">
+    <p class="eyebrow">Start with a clear view</p>
+    <h1>Bring the student journey into focus.</h1>
+    <p>Create a local JTrack account. Production teams can close public registration and provision accounts from the command line.</p>
+    <p class="mono">Secure by role / Grounded in source data</p>
+  </section>
+  <section class="auth-panel" aria-labelledby="auth-title">
+    <div>
+      <p class="eyebrow">Account setup</p>
+      <h2 id="auth-title">Create account</h2>
+      <form method="post" class="form-stack">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label>Email address<input type="email" name="email" autocomplete="email" required autofocus></label>
+        <label>Password<span class="password-field"><input type="password" name="password" autocomplete="new-password" minlength="12" required><button type="button" data-password-toggle>Show</button></span><small>Use 12 characters or more.</small></label>
+        {% if allow_role_selection %}
+          <fieldset><legend>Workspace role</legend><div class="segmented">
+            <label><input type="radio" name="role" value="Leader" checked><span>Leader</span></label>
+            <label><input type="radio" name="role" value="Manager"><span>Manager</span></label>
+          </div></fieldset>
+        {% else %}
+          <p class="form-note">This account will be created with the {{ default_role }} role.</p>
+        {% endif %}
+        <button class="button" type="submit">Create account</button>
+      </form>
+      <p class="auth-switch">Already have access? <a href="{{ url_for('auth.login') }}">Sign in</a></p>
+    </div>
+  </section>
+</main>
+{% endblock %}

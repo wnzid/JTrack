@@ -1,0 +1,31 @@
+{% extends "app_shell.html" %}
+{% block title %}{{ report.title }} — JTrack{% endblock %}
+{% block head %}<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>{% endblock %}
+{% block content %}
+<div id="report-app" data-endpoint="{{ report.api_path }}" data-dimension="{{ report.dimension }}" data-metrics='{{ report.metrics | tojson }}' data-columns='{{ dict(report.columns) | tojson }}' data-chart-type="{{ report.chart_type }}">
+  <header class="page-intro page-intro--report">
+    <div><p class="eyebrow">{{ report.eyebrow }} / Report</p><h1>{{ report.title }}</h1><p>{{ report.description }}</p></div>
+    <div class="report-actions"><button class="button button--secondary" type="button" data-export>Export CSV</button></div>
+  </header>
+
+  <section class="report-toolbar" aria-label="Report controls">
+    <label class="search-control"><span>Find a row</span><input type="search" placeholder="Search this report" data-search></label>
+    <label><span>Sort</span><select data-sort><option value="source">Source order</option><option value="value-desc">Highest value</option><option value="value-asc">Lowest value</option><option value="label-asc">Label A–Z</option></select></label>
+    <fieldset><legend>Display</legend><div class="segmented segmented--compact">
+      <label><input type="radio" name="display" value="chart" checked><span>Chart</span></label>
+      <label><input type="radio" name="display" value="table"><span>Table</span></label>
+    </div></fieldset>
+    <label><span>Chart</span><select data-chart-type><option value="bar">Bar</option><option value="line">Line</option><option value="doughnut">Donut</option></select></label>
+  </section>
+
+  <section class="report-surface" aria-live="polite">
+    <div class="report-meta"><p data-report-status>Loading report…</p><p class="mono" data-report-source></p></div>
+    <div class="report-chart" data-chart-view><canvas aria-label="{{ report.title }} visualization" role="img"></canvas></div>
+    <div class="table-wrap" data-table-view hidden>
+      <table><thead><tr>{% for key, label in report.columns %}<th scope="col" data-column="{{ key }}">{{ label }}</th>{% endfor %}</tr></thead><tbody></tbody></table>
+    </div>
+    <div class="empty-state" data-empty hidden><strong>No matching rows</strong><p>Clear the search or choose a different sort.</p></div>
+  </section>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='Js/report-page.js') }}" type="module"></script>{% endblock %}

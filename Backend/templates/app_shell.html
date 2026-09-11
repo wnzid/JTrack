@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block body_class %}app-page{% endblock %}
+{% block body %}
+<div class="app-layout">
+  <aside class="app-rail" aria-label="Workspace">
+    <p class="app-rail__label">Workspace</p>
+    <a href="{{ url_for('pages.dashboard') if session.get('role') == 'Manager' else url_for('pages.leader_dashboard') }}" class="{{ 'is-active' if request.endpoint in ['pages.dashboard', 'pages.managerial_dashboard', 'pages.leader_dashboard'] else '' }}">
+      <span class="rail-index">01</span> Overview
+    </a>
+    <a href="{{ url_for('pages.custom_dashboard') }}" class="{{ 'is-active' if request.endpoint == 'pages.custom_dashboard' else '' }}">
+      <span class="rail-index">02</span> View builder
+    </a>
+    <div class="app-rail__rule"></div>
+    <p class="app-rail__label">Reports</p>
+    {% for nav_report in reports_for_role(session.get('role')) %}
+      <a href="{{ nav_report.page_path }}" class="{{ 'is-active' if report is defined and report.slug == nav_report.slug else '' }}">
+        {{ nav_report.title }}
+      </a>
+    {% endfor %}
+  </aside>
+  <main class="app-main" id="main-content">
+    {% block content %}{% endblock %}
+  </main>
+</div>
+{% endblock %}
