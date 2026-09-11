@@ -38,5 +38,12 @@ Thumbs.db
 # Cache
 .cache/
 .pytest_cache/
+.ruff_cache/
 .coverage
 htmlcov/
+*.db-wal
+*.db-shm
+*.db.tmp
+
+# Local Codex execution ledger (intentionally not committed)
+AGENTS.md

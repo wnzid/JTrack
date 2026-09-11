@@ -1,0 +1,27 @@
+{% extends "app_shell.html" %}
+{% block title %}View builder — JTrack{% endblock %}
+{% block head %}<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>{% endblock %}
+{% block content %}
+<div id="builder" data-endpoint="/api/data?per_page=500">
+  <header class="page-intro page-intro--split">
+    <div><p class="eyebrow">Personal workspace</p><h1>Build a focused view.</h1><p>Choose a dimension and measure from the connected source. Saved views stay in this browser.</p></div>
+    <div class="button-row"><button class="button" type="button" data-add-view>Add view</button><button class="text-button" type="button" data-reset>Reset</button></div>
+  </header>
+  <div class="builder-status" data-builder-status>Reading available fields…</div>
+  <section class="builder-grid" data-views></section>
+  <template id="view-template">
+    <article class="builder-card">
+      <header><div><p class="eyebrow">Custom analysis</p><input class="title-input" value="Untitled view" aria-label="View title"></div><button class="icon-button" type="button" data-remove aria-label="Remove view">×</button></header>
+      <div class="builder-controls">
+        <label><span>Group by</span><select data-dimension></select></label>
+        <label><span>Measure</span><select data-measure><option value="count">Record count</option></select></label>
+        <label><span>Display</span><select data-type><option value="bar">Bar</option><option value="line">Line</option><option value="doughnut">Donut</option></select></label>
+        <button class="button button--secondary" type="button" data-render>Update view</button>
+      </div>
+      <div class="builder-chart"><p data-view-state>Choose fields, then update the view.</p><canvas></canvas></div>
+      <footer><button class="text-button" type="button" data-download>Download PNG</button></footer>
+    </article>
+  </template>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='Js/builder.js') }}" type="module"></script>{% endblock %}

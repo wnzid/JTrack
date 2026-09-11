@@ -1,0 +1,31 @@
+{% extends "app_shell.html" %}
+{% block title %}{{ role }} overview — JTrack{% endblock %}
+{% block head %}<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>{% endblock %}
+{% block content %}
+<header class="page-intro page-intro--split">
+  <div><p class="eyebrow">{{ role }} overview</p><h1>Student operations, in one reading.</h1><p>Every panel links to the underlying report and source rows.</p></div>
+  <p class="data-stamp"><span class="status-dot"></span> <span data-dashboard-status>Loading source data</span></p>
+</header>
+
+<section class="dashboard-grid" data-dashboard>
+  {% for report in reports %}
+    <article class="chart-panel" data-chart-panel data-endpoint="{{ report.api_path }}" data-dimension="{{ report.dimension }}" data-metrics='{{ report.metrics | tojson }}' data-chart-type="{{ report.chart_type }}">
+      <header class="chart-panel__header">
+        <div><p class="eyebrow">{{ report.eyebrow }}</p><h2>{{ report.title }}</h2></div>
+        <a href="{{ report.page_path }}" aria-label="Open {{ report.title }} report">Open report <span aria-hidden="true">↗</span></a>
+      </header>
+      <div class="chart-panel__body">
+        <p class="chart-state" data-chart-state>Loading report…</p>
+        <canvas aria-label="{{ report.title }} chart" role="img"></canvas>
+      </div>
+      <footer><p>{{ report.description }}</p><strong data-chart-total>—</strong></footer>
+    </article>
+  {% endfor %}
+</section>
+
+<section class="decision-notes" aria-labelledby="decision-heading">
+  <div><p class="eyebrow">Reading the overview</p><h2 id="decision-heading">What deserves attention?</h2></div>
+  <ol data-insight-list><li>JTrack is assembling signals from the report layer.</li></ol>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='Js/dashboard.js') }}" type="module"></script>{% endblock %}

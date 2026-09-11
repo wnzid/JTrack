@@ -1,46 +1,28 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='Css/theme.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='Css/glass.css') }}">
-<header>
-  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm navbar-glass">
-    <div class="container-fluid px-5">
-      <a class="navbar-brand" href="{{ url_for('leader_dashboard') if session.get('role') == 'Leader' else url_for('dashboard') if session.get('role') else url_for('landing') }}">
-        <img src="{{ url_for('static', filename='Assets/logo.svg') }}" alt="JTrack Logo" />
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav mx-auto">
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('landing') }}">Home</a></li>
-          {% if session.get('email') %}
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('welcome') }}">Welcome Page</a></li>
-          {% endif %}
-          {% if session.get('role') == 'Leader' %}
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('leader_dashboard') }}">Dashboard</a></li>
-          {% elif session.get('role') == 'Manager' %}
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a></li>
-          {% else %}
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Dashboard</a></li>
-          {% endif %}
-          <li class="nav-item"><a class="nav-link" href="#">Reports</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">About Us</a></li>
-        </ul>
-        <div class="d-flex">
-          {% if session.get('email') %}
-            <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                {{ session['email'].split('@')[0] | title }}
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
-              </ul>
-            </div>
-          {% else %}
-            <a href="{{ url_for('login') }}" class="btn btn-outline-secondary me-2">Sign in</a>
-            <a href="{{ url_for('register') }}" class="btn btn-primary">Register</a>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </nav>
+<header class="site-header">
+  <div class="shell site-header__inner">
+    <a class="wordmark" href="{{ url_for('pages.welcome') if session.get('email') else url_for('pages.landing') }}" aria-label="JTrack home">
+      <span class="wordmark__mark" aria-hidden="true">JT</span>
+      <span>JTrack</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span></span><span></span><span></span><span class="sr-only">Toggle navigation</span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+      {% if session.get('email') %}
+        <a href="{{ url_for('pages.dashboard') if session.get('role') == 'Manager' else url_for('pages.leader_dashboard') }}" class="{{ 'is-active' if request.endpoint in ['pages.dashboard', 'pages.managerial_dashboard', 'pages.leader_dashboard'] else '' }}">Overview</a>
+        <a href="{{ url_for('pages.custom_dashboard') }}" class="{{ 'is-active' if request.endpoint == 'pages.custom_dashboard' else '' }}">Build a view</a>
+        <a href="{{ url_for('pages.about') }}" class="{{ 'is-active' if request.endpoint == 'pages.about' else '' }}">About</a>
+        <span class="identity"><span class="identity__role">{{ session.get('role') }}</span>{{ session.get('email') }}</span>
+        <form action="{{ url_for('auth.logout') }}" method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="text-button" type="submit">Sign out</button>
+        </form>
+      {% else %}
+        <a href="{{ url_for('pages.landing') }}" class="{{ 'is-active' if request.endpoint == 'pages.landing' else '' }}">Product</a>
+        <a href="{{ url_for('pages.about') }}" class="{{ 'is-active' if request.endpoint == 'pages.about' else '' }}">About</a>
+        <a href="{{ url_for('auth.login') }}">Sign in</a>
+        <a class="button button--small" href="{{ url_for('auth.register') }}">Create account</a>
+      {% endif %}
+    </nav>
+  </div>
 </header>
