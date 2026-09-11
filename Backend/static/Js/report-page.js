@@ -18,7 +18,7 @@ function renderChart() {
   const data = chartData(visibleRows, dimension, metrics);
   if (type === "doughnut" && data.datasets.length === 1) {
     data.datasets[0].backgroundColor = visibleRows.map((_, index) => palette[index % palette.length]);
-    data.datasets[0].borderColor = "#fbfaf5";
+    data.datasets[0].borderColor = "#ffffff";
   }
   chart?.destroy();
   chart = new Chart(canvas, { type, data, options: chartOptions(type) });

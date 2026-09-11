@@ -54,7 +54,7 @@ function render(card) {
         label: measure === "count" ? "Records" : labelFor(measure),
         data: values.map(([, value]) => value),
         backgroundColor: type === "doughnut" ? values.map((_, index) => palette[index % palette.length]) : palette[0],
-        borderColor: type === "doughnut" ? "#fbfaf5" : palette[0],
+        borderColor: type === "doughnut" ? "#ffffff" : palette[0],
         borderWidth: 2,
         tension: .28,
       }],

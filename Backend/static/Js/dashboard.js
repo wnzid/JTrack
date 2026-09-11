@@ -12,7 +12,7 @@ function buildChart(panel, rows) {
 
   if (type === "doughnut" && data.datasets.length === 1) {
     data.datasets[0].backgroundColor = rows.map((_, index) => palette[index % palette.length]);
-    data.datasets[0].borderColor = "#fbfaf5";
+    data.datasets[0].borderColor = "#ffffff";
   }
 
   const canvas = panel.querySelector("canvas");

@@ -13,7 +13,7 @@ export async function getJSON(url) {
     : payload;
 }
 
-export const palette = ["#152036", "#bb5a2a", "#1d6754", "#756b8c", "#b18a35", "#4f687d"];
+export const palette = ["#1a324d", "#2c628b", "#2f6b5f", "#6b6f86", "#8a744a", "#66798a"];
 
 export function labelFor(key) {
   return String(key)
@@ -50,15 +50,15 @@ export function chartOptions(type) {
       legend: {
         display: radial,
         position: "bottom",
-        labels: { color: "#505a68", boxWidth: 10, usePointStyle: true, padding: 16 },
+        labels: { color: "#556474", boxWidth: 10, usePointStyle: true, padding: 16 },
       },
       tooltip: { displayColors: true, padding: 11, cornerRadius: 2 },
     },
     scales: radial
       ? undefined
       : {
-          x: { grid: { display: false }, ticks: { color: "#505a68", maxRotation: 0 } },
-          y: { beginAtZero: true, border: { display: false }, grid: { color: "#ded9cd" }, ticks: { color: "#505a68", precision: 0 } },
+          x: { grid: { display: false }, ticks: { color: "#556474", maxRotation: 0 } },
+          y: { beginAtZero: true, border: { display: false }, grid: { color: "#e1e6eb" }, ticks: { color: "#556474", precision: 0 } },
         },
   };
 }
