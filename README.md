@@ -1,41 +1,44 @@
+<div align="center">
+  <img src="Backend/static/Assets/logo.svg" width="84" alt="JTrack logo" />
+
 # JTrack
 
-JTrack is a role-aware student operations workspace for monitoring applications, offers, enrollments, agents, course classifications, offer expiry, and visa status. It keeps a server-rendered Flask interface close to the underlying rows and can read from SQLite, Excel, or an optional SharePoint workbook.
+**Operational reporting for the full student application journey.**
 
-## What changed
+`Flask` · `SQLite` · `Excel` · `SharePoint optional` · `Role-aware`
 
-The current version replaces the original single-file prototype with a maintainable application structure while preserving its routes and reporting purpose.
+</div>
 
-- Flask application factory with page, authentication, API, data, and database boundaries.
-- Manager and Leader authorization on both report pages and their JSON endpoints.
-- CSRF-protected account forms, POST-only sign-out, hardened cookies, safe redirects, and production secret enforcement.
-- Stable `{data, meta}` API responses with legacy array mode, source metadata, and bounded raw-data pagination.
-- Atomic Excel-to-SQLite ETL with normalized columns, indexes, and generated report views.
-- One responsive interface and report system instead of page-specific Bootstrap/glassmorphism layers.
-- Accessible loading, empty, error, keyboard-focus, reduced-motion, table, chart, and export states.
-- A browser-persisted custom view builder.
-- Pytest coverage, Ruff checks, and GitHub Actions quality gates.
+JTrack is a student-operations workspace for applications, offers, enrolments, agents, course classification, offer expiry, and visa status. A server-rendered Flask interface stays close to the underlying rows and can read from SQLite, Excel, or an optional SharePoint workbook.
+
+## Product capabilities
+
+- Manager and Leader authorization on pages and JSON endpoints
+- Report catalogue spanning the student lifecycle
+- Responsive tables, charts, filtering, and export states
+- Browser-persisted custom view builder
+- Stable `{data, meta}` API envelopes with bounded pagination
+- Atomic Excel-to-SQLite ETL with normalized columns, indexes, and report views
+- CSRF-protected account flows, hardened cookies, and safe redirects
+- Pytest, Ruff, and GitHub Actions quality gates
 
 ## Architecture
 
 ```text
 Backend/
-├── app.py                         # Compatible development / WSGI entry point
-├── etl_load_from_excel_to_sqlite.py
+├── app.py                              Development / WSGI entry point
+├── etl_load_from_excel_to_sqlite.py    Atomic data loader
 ├── jtrack/
-│   ├── __init__.py                # create_app()
-│   ├── api.py                     # Authenticated JSON endpoints
-│   ├── auth.py                    # Registration, sign-in, sign-out
-│   ├── config.py                  # Environment configuration
-│   ├── data.py                    # SQLite, Excel, SharePoint adapters
-│   ├── database.py                # User DB and admin CLI
-│   ├── pages.py                   # Server-rendered routes
-│   ├── reports.py                 # Canonical report catalog and SQL
-│   └── security.py                # Role and CSRF controls
-├── static/Css/app.css             # Product design system
-├── static/Js/                     # Shared API, charts, reports, builder
-├── templates/                     # Shared shell and focused pages
-└── tests/
+│   ├── api.py                          Authenticated JSON endpoints
+│   ├── auth.py                         Account workflows
+│   ├── data.py                         SQLite, Excel, SharePoint adapters
+│   ├── database.py                     User database and admin CLI
+│   ├── pages.py                        Server-rendered routes
+│   ├── reports.py                      Canonical reports and SQL
+│   └── security.py                     Role and CSRF controls
+├── static/                             Product styles and scripts
+├── templates/                          Shared shell and pages
+└── tests/                              Application and API tests
 ```
 
 ## Local setup
@@ -45,80 +48,55 @@ JTrack supports Python 3.11 and newer.
 ```bash
 python -m venv .venv
 # Windows: .venv\Scripts\activate
-# macOS / Linux: source .venv/bin/activate
+# macOS/Linux: source .venv/bin/activate
 python -m pip install -r Backend/requirements-dev.txt
 ```
 
-Copy `.env.example` to `Backend/.env`, then set a long random `SECRET_KEY`. Development will generate an ephemeral key if it is absent; production refuses to start without one.
+Copy `.env.example` to `Backend/.env` and set a long random `SECRET_KEY`. Development can create an ephemeral key; production refuses to start without one.
 
-### Prepare analytics data
-
-The application can read the bundled workbook directly. Generating SQLite first provides indexed queries and report views:
+Prepare the indexed analytics database and start the application:
 
 ```bash
 python Backend/etl_load_from_excel_to_sqlite.py
-```
-
-Custom paths are supported:
-
-```bash
-python Backend/etl_load_from_excel_to_sqlite.py --source path/to/input.xlsx --destination path/to/analytics.db
-```
-
-### Run
-
-```bash
 python Backend/app.py
 ```
 
-Open [http://127.0.0.1:5001](http://127.0.0.1:5001). A health check is available at `/health`.
+Open `http://127.0.0.1:5001`; health is available at `/health`.
 
-## Accounts and production enrollment
+## Configuration
 
-Development allows registration and role selection by default to preserve the original demo workflow. Production defaults both off. Create production accounts from the application CLI:
+| Variable | Purpose | Development default |
+| --- | --- | --- |
+| `JTRACK_ENV` | Runtime behavior | `development` |
+| `SECRET_KEY` | Session signing | ephemeral outside production |
+| `ANALYTICS_DATABASE` | SQLite analytics source | `Backend/dummy_data.db` |
+| `EXCEL_DATA_PATH` | Excel fallback | `Backend/dummy_data.xlsx` |
+| `USERS_DATABASE` | Account database | `Backend/instance/users.db` |
+| `ALLOW_REGISTRATION` | Public registration | enabled |
+| `ALLOW_ROLE_SELECTION` | Self-selected demo roles | enabled |
+| `USE_SHAREPOINT` | SharePoint adapter | `false` |
+
+Production defaults registration and role selection off. Create managed accounts with:
 
 ```bash
 cd Backend
 flask --app app create-user
 ```
 
-You can independently configure `ALLOW_REGISTRATION`, `ALLOW_ROLE_SELECTION`, and `DEFAULT_REGISTRATION_ROLE`. Never expose role self-selection on an untrusted public deployment.
-
-## Configuration
-
-| Variable | Purpose | Default |
-| --- | --- | --- |
-| `JTRACK_ENV` | `development` or `production` behavior | `development` |
-| `SECRET_KEY` | Signs sessions; required in production | generated in development |
-| `ANALYTICS_DATABASE` | SQLite analytics path | `Backend/dummy_data.db` |
-| `EXCEL_DATA_PATH` | Excel fallback path | `Backend/dummy_data.xlsx` |
-| `USERS_DATABASE` | Account database path | `Backend/instance/users.db` |
-| `DEFAULT_SQLITE_TABLE` | Raw-data table override | first user table |
-| `API_MAX_PAGE_SIZE` | Maximum `/api/data` page size | `500` |
-| `ALLOW_REGISTRATION` | Enables the registration page | on in development |
-| `ALLOW_ROLE_SELECTION` | Allows self-selected roles | on in development |
-| `SESSION_COOKIE_SECURE` | HTTPS-only session cookie | on in production |
-| `USE_SHAREPOINT` | Reads the configured SharePoint workbook | `false` |
-
-SharePoint additionally requires `SP_CLIENT_ID`, `SP_CLIENT_SECRET`, `SP_SITE_URL`, and `SP_FILE_PATH`, plus `python -m pip install -r Backend/requirements-sharepoint.txt`.
-
-## API contract
-
-Authenticated API responses use a consistent envelope:
+## API shape
 
 ```json
 {
   "data": [{ "status": "Offered", "total": 42 }],
   "meta": {
     "count": 1,
-    "generated_at": "2026-09-11T12:00:00+00:00",
     "source": "sqlite",
     "report": "application-status"
   }
 }
 ```
 
-Append `?legacy=1` to report endpoints during migration if an existing integration still expects a bare JSON array. `/api/data` also accepts `page` and `per_page`.
+Append `?legacy=1` only for integrations that still require a bare array. `/api/data` supports `page` and `per_page`.
 
 ## Quality checks
 
@@ -128,15 +106,13 @@ python -m pytest
 python -m compileall -q Backend
 ```
 
-GitHub Actions runs lint and tests on every pull request and pushes to `main`.
+## Security and data handling
 
-## Security notes
-
-- Keep secrets in `Backend/.env`; it is ignored by Git.
-- Run production behind HTTPS and keep `SESSION_COOKIE_SECURE=true`.
-- Disable public registration unless the deployment is an intentionally isolated demo.
-- The bundled workbook is sample data. Review source files before committing real student information.
+- Keep secrets in `Backend/.env`; never commit real credentials.
+- Use HTTPS and secure cookies in production.
+- Keep public registration and role selection disabled on untrusted deployments.
+- The bundled workbook is sample data; review every source before committing real student information.
 
 ## License
 
-No license is currently declared. Contact the repository owner before redistributing the project.
+No license is currently declared. Contact the owner before redistribution.
